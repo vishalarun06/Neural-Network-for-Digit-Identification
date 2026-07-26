@@ -10,12 +10,12 @@ class grad_descent:
 
     def step(self, model):
 
-        for layer in model.layers:
+        for layer in model.Layers:
 
             if layer.params:
 
                 layer.params['W'] -= self.lr * layer.gradients['W'] # Update weights
-                layer.params['b'] -= self.lr * layer.grads['b'] # Update biases
+                layer.params['b'] -= self.lr * layer.gradients['b'] # Update biases
 
 class Adam:
     """
@@ -37,7 +37,7 @@ class Adam:
     def step(self, model):
         self.t += 1
         
-        for layer_idx, layer in enumerate(model.layers):
+        for layer_idx, layer in enumerate(model.Layers):
             if not layer.params:
                 continue # Skip activation layers
                 
@@ -49,7 +49,7 @@ class Adam:
                                      'b': np.zeros_like(layer.params['b'])}
 
             for param_name in ['W', 'b']:
-                grad = layer.grads[param_name]
+                grad = layer.gradients[param_name]
                 
                 # 1. Update biased first moment estimate (Momentum)
                 self.m[layer_idx][param_name] = self.beta1 * self.m[layer_idx][param_name] + (1 - self.beta1) * grad
